@@ -5,7 +5,7 @@
       Skipping New Relic tasks. vault_newrelic_license is not set.
   when: vault_newrelic_license is not defined
 
-- include: install.yml
+- include_tasks: install.yml
   when: vault_newrelic_license is defined
-- include: ini.yml
+- include_tasks: ini.yml
   when: vault_newrelic_license is defined
