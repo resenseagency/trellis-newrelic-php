@@ -10,7 +10,6 @@
 [![Hire Typist Tech](https://img.shields.io/badge/Hire-Typist%20Tech-ff69b4.svg)](https://typist.tech/contact/)
 [![Twitter Follow @TangRufus](https://img.shields.io/twitter/follow/TangRufus?style=flat-square&color=1da1f2)](https://twitter.com/tangrufus)
 
-
 Install [New Relic PHP agent](https://docs.newrelic.com/docs/agents/php-agent) on [Trellis](https://github.com/roots/trellis) servers.
 
 ## Role Variables
@@ -53,28 +52,28 @@ Add this role to `dev.yml` and `server.yml` **immediately after** `role: php`:
   roles:
       # Some other Trellis roles ...
       - { role: php, tags: [php] }
-+     - { role: TypistTech.trellis-newrelic-php, tags: [php, newrelic-php] }
++     - { role: trellis-newrelic-php, tags: [php, newrelic-php] }
       # Some other Trellis roles ...
 ```
 
 ## Requirements
 
-* [Ansible](http://docs.ansible.com/ansible/latest/intro_installation.html) v2.7 or later
-* Python v3.7.6 or later
-* [Trellis](https://github.com/roots/trellis) v1.3.0 or later
-* [New Relic](https://newrelic.com/) account
+- [Ansible](http://docs.ansible.com/ansible/latest/intro_installation.html) v2.7 or later
+- Python v3.7.6 or later
+- [Trellis](https://github.com/roots/trellis) v1.3.0 or later
+- [New Relic](https://newrelic.com/) account
 
 ## Installation
 
 Add this role to `galaxy.yml`:
 
 ```yaml
-- src: TypistTech.trellis-newrelic-php # Case-sensitive!
-  version: XXX.YYY.ZZZ # Check for latest version!
+- name: trellis-newrelic-php
+  src: https://github.com/resenseagency/trellis-newrelic-php
+  type: git
 ```
 
 Run `$ trellis galaxy install` to install this new role.
-
 
 ## Common Errors
 
@@ -87,17 +86,19 @@ Encrypt your New Relic license key in `group_vars/<environment>/vault.yml`. See 
 Solution: Define different `appname` for different environments.
 
 Tips:
+
 ```yaml
 # group_vars/all/main.yml
 #########################
 
 newrelic_config:
-  appname: "My Awesome App {{ env }}"
+  appname: "My Awesome App {{ env | capitalize }}"
 ```
 
 ### Error after upgrading PHP version
 
 New Relic would fail and causes provision end up in errors when upgrading PHP major or minor releases (e.g: from 7.4 to 8.0, from 8.0 to 8.1).
+
 ```
 non-zero return code
 PHP Warning:  PHP Startup: Unable to load dynamic library 'newrelic.so'
@@ -108,6 +109,7 @@ cannot open shared object file: No such file or directory)) in Unknown on
 ```
 
 After each PHP major or minor release upgrade (i.e: when you see the above error):
+
 ```bash
 # For multi-server setups, perform the following steps on each server.
 ssh admin@123.456.789
@@ -121,7 +123,7 @@ trellis provision production
 
 ## Limitations
 
-* Only one New Relic APM application per server by default.
+- Only one New Relic APM application per server by default.
 
 [`Extends`](https://jinja.palletsprojects.com/en/2.10.x/templates/#template-inheritance) the [`fastcgi_basic` block](https://github.com/roots/trellis/blob/73cbfb9ff840b7b55b60c77ee7d655c54211dbc1/roles/wordpress-setup/templates/wordpress-site.conf.j2#L236-L241) to include `fastcgi_param PHP_VALUE "newrelic.appname={{ item.key }} ({{ env }})";` right after the line `include fastcgi_params;` to work around this limitation.
 
@@ -131,12 +133,12 @@ Pull requests are welcomed.
 
 ### It looks awesome. Where can I find some more goodies like this?
 
-* Articles on Typist Tech's [blog](https://typist.tech)
-* [Tang Rufus' WordPress plugins](https://profiles.wordpress.org/tangrufus#content-plugins) on wp.org
-* More projects on [Typist Tech's GitHub profile](https://github.com/TypistTech)
-* Stay tuned on [Typist Tech's newsletter](https://typist.tech/go/newsletter)
-* Follow [Tang Rufus' Twitter account](https://twitter.com/TangRufus)
-* Hire [Tang Rufus](https://typist.tech/contact) to build your next awesome site
+- Articles on Typist Tech's [blog](https://typist.tech)
+- [Tang Rufus' WordPress plugins](https://profiles.wordpress.org/tangrufus#content-plugins) on wp.org
+- More projects on [Typist Tech's GitHub profile](https://github.com/TypistTech)
+- Stay tuned on [Typist Tech's newsletter](https://typist.tech/go/newsletter)
+- Follow [Tang Rufus' Twitter account](https://twitter.com/TangRufus)
+- Hire [Tang Rufus](https://typist.tech/contact) to build your next awesome site
 
 ### This package isn't on wp.org. Where can I give a :star::star::star::star::star: review?
 
@@ -185,7 +187,6 @@ If you discover any security related issues, please email [trellis-newrelic-php@
 Full list of contributors can be found [here](https://github.com/TypistTech/trellis-newrelic-php/graphs/contributors).
 
 Special thanks to [the Roots team](https://roots.io/about/) whose [Trellis](https://github.com/roots/trellis) make this project possible.
-
 
 ## Contributing
 
